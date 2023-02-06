@@ -10,22 +10,18 @@ export default function Home(props) {
     { user: "gpt", message: "how can I help you " },
   ]);
 
-  function getModels() {
+  function handleClearLog() {
+    setChatLog([]);
+    setCurrentModel("ada");
+  }
+
+  useEffect(() => {
     fetch("/api/chatgpt")
       .then((res) => res.json())
       .then((data) => {
         setModels(data.data);
       });
-  }
-
-  useEffect(() => {
-    getModels();
   }, []);
-
-  function handleClearLog() {
-    setChatLog([{ user: "gpt", message: "how can I help you again" }]);
-    setCurrentModel('ada')
-  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -74,7 +70,7 @@ export default function Home(props) {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               className="chat-input"
-            ></input>
+            />
           </form>
         </div>
       </section>
@@ -82,11 +78,3 @@ export default function Home(props) {
   );
 }
 
-export async function getServerSideProps(ctx) {
-  // fetch(`http://${ctx.req?.headers.host}/api/chatgpt`)
-  //   .then((res) => res.json());
-
-  return {
-    props: { message: "this empty" },
-  };
-}
